@@ -1,14 +1,6 @@
-/*	IVAN CORTES
- * 	DATE: 2020-02-07
- * 	CLASS: ECE5721
- * 	LAB2: 7 SEGMENT DISPLAY
-*/
 
-// INCLUDE
 #include <MKL25Z4.h>
-/*******************************************************************************
- * DEFINITIONS
- ******************************************************************************/
+
 #define Segment_a (0)
 #define Segment_b (1)
 #define Segment_c (2)
@@ -21,9 +13,7 @@
 #define decrement_sw (1)
 #define MASK(x)  (1UL << (x))
 volatile unsigned int count;
-/*******************************************************************************
- * CODE
- ******************************************************************************/
+
 // delay(ms) -- Spin wait delay (in ms)
 //              Note:  uses low power timer (LPTMR)
 void delay(unsigned int length_ms)
