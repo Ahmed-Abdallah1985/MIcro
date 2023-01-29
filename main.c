@@ -1,6 +1,5 @@
-
 #include <MKL25Z4.h>
-
+                                //difination pin 7segment
 #define Segment_a (0)
 #define Segment_b (1)
 #define Segment_c (2)
@@ -14,15 +13,15 @@
 #define MASK(x)  (1UL << (x))
 volatile unsigned int count;
 
-// delay(ms) -- Spin wait delay (in ms)
-//              Note:  uses low power timer (LPTMR)
+                                                // delay(ms) -- Spin wait delay (in ms)
+                                                 // Note:  uses low power timer (LPTMR)
 void delay(unsigned int length_ms)
 {
-    SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK;  // Make sure clock is enabled
-    LPTMR0->CSR = 0;                     // Reset LPTMR settings
-    LPTMR0->CMR = length_ms;             // Set compare value (in ms)
+    SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK;        // Make sure clock is enabled
+    LPTMR0->CSR = 0;                           // Reset LPTMR settings
+    LPTMR0->CMR = length_ms;                   // Set compare value (in ms)
 
-    // Use 1kHz LPO with no prescaler
+                                               // Use 1kHz LPO with no prescaler
     LPTMR0->PSR = LPTMR_PSR_PCS(1) | LPTMR_PSR_PBYP_MASK;
 
     // Start the timer and wait for it to reach the compare value
@@ -30,7 +29,7 @@ void delay(unsigned int length_ms)
     while (!(LPTMR0->CSR & LPTMR_CSR_TCF_MASK))
         ;
 
-    LPTMR0->CSR = 0;                     // Turn off timer
+    LPTMR0->CSR = 0;                         // Turn off timer
 }
 
 void SevenSegment(uint8_t count,uint8_t dp, uint8_t dec_hex)
@@ -77,32 +76,32 @@ void SevenSegment(uint8_t count,uint8_t dp, uint8_t dec_hex)
       }
    }
 void PORTD_IRQHandler(void) { 
-// clear pending interrupt from PORTD in NVIC
+                                                          // clear pending interrupt from PORTD in NVIC
 NVIC_ClearPendingIRQ(PORTD_IRQn);
-// if the interrupt was caused by the Increment switch, increment count
+                                                         // if the interrupt was caused by the Increment switch, increment count
 if ((PORTD->ISFR & MASK(increment_sw))) {
 if(count<8){
 count++;}
 else{count=0;}
 }
-// if the interrupt was caused by the Decrement switch, decrement count
+                                                         // if the interrupt was caused by the Decrement switch, decrement count
 else if ((PORTD->ISFR & MASK(decrement_sw))){
 if(count>0){
 count--;}
 else{count=8;}
 }
 	
-// clear status flags in PORTD to prevent recurrent interrupts
+                                                                          // clear status flags in PORTD to prevent recurrent interrupts
 PORTD->ISFR = 0xffffffff;
 }
 int main(void)
 {
 	   
-	   int dec_hex=10; //change to 10 for decimal
+	   int dec_hex=9;                                                  //change to 9 for decimal
 
-			// Enable Clock to ports C&D
+			                                                  // Enable Clock to ports C&D
 			SIM->SCGC5 |= (SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK);
-			// Make GPIO
+			                                                   // Make GPIO
 			PORTC->PCR[Segment_a] &= ~PORT_PCR_MUX_MASK;
 			PORTC->PCR[Segment_a] |= PORT_PCR_MUX(1);
 			PORTC->PCR[Segment_b] &= ~PORT_PCR_MUX_MASK;
@@ -123,13 +122,13 @@ int main(void)
 			PORTD->PCR[increment_sw] = PORT_PCR_MUX(1);
 			PORTD->PCR[decrement_sw] = ~PORT_PCR_MUX_MASK;
 			PORTD->PCR[decrement_sw] = PORT_PCR_MUX(1);
-			// set LEDs bits to outputs
+			                                                               // set LEDs bits to outputs
 			PTC->PDDR |= MASK(Segment_a) | MASK(Segment_b)| MASK(Segment_c)| MASK(Segment_d)| MASK(Segment_e)| MASK(Segment_f)| MASK(Segment_g)| MASK(Segment_dot);
 			PTD->PDDR = 0x00;
-			// Configure Interrupts on PORTD& enable pullup resistors
+			                                                            // Configure Interrupts on PORTD& enable pullup resistors
 			PORTD->PCR[increment_sw] |= PORT_PCR_IRQC(10)| PORT_PCR_PS_MASK | PORT_PCR_PE_MASK; //Interrupt on rising edge
 			PORTD->PCR[decrement_sw] |= PORT_PCR_IRQC(10)| PORT_PCR_PS_MASK | PORT_PCR_PE_MASK; //Interrupt on rising edge
-			// Enable Interrupts
+			                                                            // Enable Interrupts
 			NVIC_SetPriority(PORTD_IRQn, 128);
 			NVIC_ClearPendingIRQ(PORTD_IRQn);
 			NVIC_EnableIRQ(PORTD_IRQn);
