@@ -97,7 +97,7 @@ PORTD->ISFR = 0xffffffff;
 int main(void)
 {
 	   
-	   int dec_hex=9;                                                  //change to 9 for decimal
+	   int dec_hex=10;                                                  //change to 10 for decimal
 
 			                                                  // Enable Clock to ports C&D
 			SIM->SCGC5 |= (SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK);
@@ -126,8 +126,8 @@ int main(void)
 			PTC->PDDR |= MASK(Segment_a) | MASK(Segment_b)| MASK(Segment_c)| MASK(Segment_d)| MASK(Segment_e)| MASK(Segment_f)| MASK(Segment_g)| MASK(Segment_dot);
 			PTD->PDDR = 0x00;
 			                                                            // Configure Interrupts on PORTD& enable pullup resistors
-			PORTD->PCR[increment_sw] |= PORT_PCR_IRQC(10)| PORT_PCR_PS_MASK | PORT_PCR_PE_MASK; //Interrupt on rising edge
-			PORTD->PCR[decrement_sw] |= PORT_PCR_IRQC(10)| PORT_PCR_PS_MASK | PORT_PCR_PE_MASK; //Interrupt on rising edge
+			PORTD->PCR[increment_sw] |= PORT_PCR_IRQC(9)| PORT_PCR_PS_MASK | PORT_PCR_PE_MASK; //Interrupt on rising edge
+			PORTD->PCR[decrement_sw] |= PORT_PCR_IRQC(9)| PORT_PCR_PS_MASK | PORT_PCR_PE_MASK; //Interrupt on rising edge
 			                                                            // Enable Interrupts
 			NVIC_SetPriority(PORTD_IRQn, 128);
 			NVIC_ClearPendingIRQ(PORTD_IRQn);
