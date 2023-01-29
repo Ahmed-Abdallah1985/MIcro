@@ -100,7 +100,7 @@ int main(void)
 	   int dec_hex=10;                                                  //change to 10 for decimal
 
 			                                                  // Enable Clock to ports C&D
-			SIM->SCGC5 |= (SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK);
+			SIM->SCGC5 |= (SIM_SCGC5_PORTC_MASK  | SIM_SCGC5_PORTD_MASK);
 			                                                   // Make GPIO
 			PORTC->PCR[Segment_a] &= ~PORT_PCR_MUX_MASK;
 			PORTC->PCR[Segment_a] |= PORT_PCR_MUX(1);
